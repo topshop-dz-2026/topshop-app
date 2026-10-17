@@ -4,25 +4,30 @@ window.onload = function() {
     renderProducts();
     initWilayas();
     
-    document.getElementById('orderForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        sendToWhatsApp();
-    });
-};
+    let form = document.getElementById('orderForm');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            sendToWhatsApp();
+        });
+    }
+}; 
 
 function renderProducts() {
     const grid = document.getElementById('productsGrid');
+    if (!grid) return;
+    
     grid.innerHTML = PRODUCTS.map(product => {
-        let colorOptions = product.colors.map(c => `<option value="${c}">${c}</option>`).join('');
-        let sizeOptions = product.sizes.map(s => `<option value="${s}">${s}</option>`).join('');
+        let colorOptions = `<option value="" disabled selected>-- اختر اللون --</option>` + product.colors.map(c => `<option value="${c}">${c}</option>`).join('');
+        let sizeOptions = `<option value="" disabled selected>-- اختر المقاس --</option>` + product.sizes.map(s => `<option value="${s}">${s}</option>`).join('');
         
         return `
             <div class="product-card">
                 <img src="${product.image}" alt="${product.name}" loading="lazy">
                 <h3>${product.name}</h3>
                 <span class="price">${product.price} دج</span>
-                <select id="color-${product.id}">${colorOptions}</select>
-                <select id="size-${product.id}">${sizeOptions}</select>
+                <select id="color-${product.id}" style="color: #666;">${colorOptions}</select>
+                <select id="size-${product.id}" style="color: #666;">${sizeOptions}</select>
                 <button onclick="addToCart(${product.id})"><i class="fa-solid fa-cart-plus"></i> أضف للسلة</button>
             </div>
         `;
@@ -31,8 +36,17 @@ function renderProducts() {
 
 function addToCart(id) {
     const product = PRODUCTS.find(p => p.id === id);
-    const color = document.getElementById(`color-${id}`).value;
-    const size = document.getElementById(`size-${id}`).value;
+    if (!product) return;
+
+    const colorEl = document.getElementById(`color-${id}`);
+    const sizeEl = document.getElementById(`size-${id}`);
+    
+    const color = colorEl ? colorEl.value : "";
+    const size = sizeEl ? sizeEl.value : "";
+
+    if (!color || !size) {
+        return alert("⚠️ الرجاء اختيار اللون والمقاس أولاً!");
+    }
     
     const existingItem = cart.find(item => item.id === id && item.color === color && item.size === size);
     
@@ -48,6 +62,8 @@ function addToCart(id) {
 
 function updateCartUI() {
     const cartItemsDiv = document.getElementById('cartItems');
+    if (!cartItemsDiv) return;
+
     let total = 0;
     let count = 0;
 
@@ -72,8 +88,11 @@ function updateCartUI() {
         }).join('');
     }
 
-    document.getElementById('cartTotal').innerText = total;
-    document.getElementById('cartCount').innerText = count;
+    let cartTotalEl = document.getElementById('cartTotal');
+    let cartCountEl = document.getElementById('cartCount');
+    
+    if (cartTotalEl) cartTotalEl.innerText = total;
+    if (cartCountEl) cartCountEl.innerText = count;
 }
 
 function removeFromCart(index) {
@@ -83,14 +102,22 @@ function removeFromCart(index) {
 
 function initWilayas() {
     const sel = document.getElementById('cWilaya');
+    if (!sel) return;
+    
+    sel.innerHTML = '<option value="">-- اختر الولاية --</option>';
     for (let w in WILAYAS_DATA) {
         sel.innerHTML += `<option value="${w}">${w}</option>`;
     }
 }
 
 function updateBaladiyas() {
-    const w = document.getElementById('cWilaya').value;
+    const wEl = document.getElementById('cWilaya');
+    if (!wEl) return;
+    const w = wEl.value;
+
     const b = document.getElementById('cBaladiya');
+    if (!b) return;
+    
     b.innerHTML = '<option value="">-- اختر البلدية --</option>';
     
     if (w) {
@@ -101,13 +128,13 @@ function updateBaladiyas() {
         let deliveryFee = WILAYAS_DATA[w].fee;
         let productsTotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
         
-        document.getElementById('checkoutProductsTotal').innerText = productsTotal;
-        document.getElementById('checkoutDeliveryFee').innerText = deliveryFee;
-        document.getElementById('checkoutGrandTotal').innerText = productsTotal + deliveryFee;
-    } else {
-        document.getElementById('checkoutProductsTotal').innerText = 0;
-        document.getElementById('checkoutDeliveryFee').innerText = 0;
-        document.getElementById('checkoutGrandTotal').innerText = 0;
+        let elProducts = document.getElementById('checkoutProductsTotal');
+        let elDelivery = document.getElementById('checkoutDeliveryFee');
+        let elGrand = document.getElementById('checkoutGrandTotal');
+        
+        if (elProducts) elProducts.innerText = productsTotal;
+        if (elDelivery) elDelivery.innerText = deliveryFee;
+        if (elGrand) elGrand.innerText = productsTotal + deliveryFee;
     }
 }
 
@@ -117,6 +144,8 @@ function sendToWhatsApp() {
     const w = document.getElementById('cWilaya').value;
     const b = document.getElementById('cBaladiya').value;
     const addr = document.getElementById('cAddress').value;
+
+    if (!w) return alert("الرجاء اختيار الولاية!");
 
     let totalProducts = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
     let deliveryFee = WILAYAS_DATA[w].fee;
@@ -136,17 +165,29 @@ function sendToWhatsApp() {
     window.open(`https://wa.me/${myPhoneNumber}?text=${encodeURIComponent(msg)}`, '_blank');
 }
 
-function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+function openModal(id) { 
+    let el = document.getElementById(id);
+    if (el) el.style.display = 'flex'; 
+}
+
+function closeModal(id) { 
+    let el = document.getElementById(id);
+    if (el) el.style.display = 'none'; 
+}
 
 function openCheckout() {
     if (cart.length === 0) return alert("السلة فارغة!");
     
-    let productsTotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-    document.getElementById('checkoutProductsTotal').innerText = productsTotal;
-    document.getElementById('checkoutDeliveryFee').innerText = 0;
-    document.getElementById('checkoutGrandTotal').innerText = productsTotal;
-    
     closeModal('cartModal');
     openModal('checkoutModal');
+    
+    let productsTotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+    
+    let elProducts = document.getElementById('checkoutProductsTotal');
+    let elDelivery = document.getElementById('checkoutDeliveryFee');
+    let elGrand = document.getElementById('checkoutGrandTotal');
+    
+    if (elProducts) elProducts.innerText = productsTotal;
+    if (elDelivery) elDelivery.innerText = 0;
+    if (elGrand) elGrand.innerText = productsTotal;
 }

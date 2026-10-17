@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Top Shop DZ</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <header class="app-header">
+        <div class="top-bar">
+            <div class="logo">Top Shop <span>DZ</span></div>
+            <div class="cart-icon" onclick="openModal('cartModal')">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span class="badge" id="cartCount">0</span>
+            </div>
+        </div>
+        <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="ابحث عن منتج...">
+        </div>
+    </header>
+
+    <div class="hero-banner">
+        <div class="banner-content">
+            <h2>تخفيضات كبرى 🎉</h2>
+            <p>توصيل سريع لـ 58 ولاية</p>
+            <button>تسوق الآن</button>
+        </div>
+    </div>
+
+    <div class="categories-section">
+        <h3 class="section-title">التصنيفات</h3>
+        <div class="categories-scroll">
+            <div class="cat-item active"><i class="fa-solid fa-border-all"></i><span>الكل</span></div>
+            <div class="cat-item"><i class="fa-solid fa-shirt"></i><span>ملابس</span></div>
+            <div class="cat-item"><i class="fa-solid fa-mobile-screen"></i><span>إلكترونيات</span></div>
+            <div class="cat-item"><i class="fa-solid fa-shoe-prints"></i><span>أحذية</span></div>
+        </div>
+    </div>
+
+    <main class="products-section">
+        <h3 class="section-title">منتجات مميزة ✨</h3>
+        <div id="productsGrid" class="products-grid"></div>
+    </main>
+
+    <nav class="bottom-nav">
+        <div class="nav-item active"><i class="fa-solid fa-house"></i><span>الرئيسية</span></div>
+        <div class="nav-item"><i class="fa-solid fa-heart"></i><span>المفضلة</span></div>
+        <div class="nav-item" onclick="openModal('cartModal')"><i class="fa-solid fa-cart-shopping"></i><span>السلة</span></div>
+    </nav>
+
+    <div id="cartModal" class="modal-bg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>سلة المشتريات</h2>
+                <span class="close-btn" onclick="closeModal('cartModal')">&times;</span>
+            </div>
+            <div id="cartItems" class="cart-items"></div>
+            <div class="cart-footer">
+                <h3>المجموع: <span id="cartTotal">0</span> دج</h3>
+                <button class="checkout-btn" onclick="openCheckout()">متابعة الطلب</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="checkoutModal" class="modal-bg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>معلومات التوصيل</h2>
+                <span class="close-btn" onclick="closeModal('checkoutModal')">&times;</span>
+            </div>
+            <form id="orderForm">
+                <input type="text" id="cName" placeholder="الاسم الكامل" required>
+                <input type="tel" id="cPhone" placeholder="رقم الهاتف" required>
+                
+                <select id="cWilaya" required onchange="updateBaladiyas()">
+                    <option value="">-- اختر الولاية --</option>
+                </select>
+                
+                <select id="cBaladiya" required>
+                    <option value="">-- اختر البلدية --</option>
+                </select>
+
+                <input type="text" id="cAddress" placeholder="العنوان بالتفصيل" required>
+                
+                <!-- هذا الجزء مهم باش ما يطيحش الكود -->
+                <div class="order-summary" style="background: #f1f2f6; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                    <p style="display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 14px;">سعر المنتجات: <span id="checkoutProductsTotal">0</span> دج</p>
+                    <p style="display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 14px;">سعر التوصيل: <span id="checkoutDeliveryFee">0</span> دج</p>
+                    <h3 style="display: flex; justify-content: space-between; border-top: 1px solid #ddd; padding-top: 10px; margin-top: 10px; font-size: 16px;">المجموع الكلي: <span id="checkoutGrandTotal" style="color: #ff4757;">0</span> دج</h3>
+                </div>
+
+                <button type="submit" class="submit-btn"><i class="fa-brands fa-whatsapp"></i> تأكيد الطلب عبر واتساب</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="products.js"></script>
+    <script src="wilayas.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

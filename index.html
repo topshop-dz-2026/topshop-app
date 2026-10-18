@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TopShop | متجرك الإلكتروني</title>
+    <!-- ربط ملف التصميم -->
+    <link rel="stylesheet" href="style.css">
+    <!-- أيقونات -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- الهيدر -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <i class="fa-solid fa-cart-shopping"></i> TopShop
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="ابحث عن منتج...">
+                <button><i class="fa-solid fa-search"></i></button>
+            </div>
+            <div class="header-icons">
+                <button class="cart-btn"><i class="fa-solid fa-shopping-cart"></i><span class="cart-count">0</span></button>
+            </div>
+        </div>
+    </header>
+
+    <!-- البانر الرئيسي -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>مرحباً بك في TopShop</h1>
+            <p>تسوق أفضل المنتجات بأفضل الأسعار</p>
+            <button class="btn-primary">تسوق الآن</button>
+        </div>
+    </section>
+
+    <!-- الأقسام -->
+    <section class="categories-section">
+        <h2 class="section-title"><i class="fa-solid fa-list"></i> تسوق حسب القسم</h2>
+        <div class="categories-grid">
+            <div class="category-card">ملابس</div>
+            <div class="category-card">أحذية</div>
+            <div class="category-card">حقائب</div>
+            <div class="category-card">إكسسوارات</div>
+        </div>
+    </section>
+
+    <!-- المنتجات -->
+    <section class="products-section">
+        <h2 class="section-title"><i class="fa-solid fa-fire"></i> منتجات مميزة</h2>
+        <div class="products-grid" id="products-container">
+            <!-- المنتجات راح تبان هنا من Firebase لاحقاً -->
+        </div>
+    </section>
+
+    <!-- القائمة السفلية (للهاتف) -->
+    <nav class="bottom-nav">
+        <a href="#" class="active"><i class="fa-solid fa-home"></i><span>الرئيسية</span></a>
+        <a href="#"><i class="fa-solid fa-list"></i><span>الأقسام</span></a>
+        <a href="#"><i class="fa-solid fa-heart"></i><span>المفضلة</span></a>
+        <a href="#"><i class="fa-solid fa-user"></i><span>حسابي</span></a>
+    </nav>
+
+    <!-- ربط ملف الجافاسكريبت -->
+    <script src="script.js"></script>
+</body>
+</html>

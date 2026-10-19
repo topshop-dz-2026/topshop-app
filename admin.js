@@ -22,7 +22,7 @@ async function loadAdminProducts() {
     productsList.innerHTML = 'جاري التحميل...';
     try {
         // هنا رجعناها "منتجات" بالعربية باش تتطابق مع اللي في Firebase
-        const querySnapshot = await getDocs(collection(db, "منتجات")); 
+        const querySnapshot = await getDocs(collection(db, "products"));
         productsList.innerHTML = '';
         
         if (querySnapshot.empty) {
@@ -73,7 +73,7 @@ form.addEventListener('submit', async (e) => {
     const image = document.getElementById('p-image').value;
 
     try {
-        // هنا رجعناها "منتجات" بالعربية
+    await addDoc(collection(db, "products"), {
         await addDoc(collection(db, "منتجات"), { 
             name: name,
             price: Number(price),

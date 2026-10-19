@@ -73,8 +73,7 @@ form.addEventListener('submit', async (e) => {
     const image = document.getElementById('p-image').value;
 
     try {
-    await addDoc(collection(db, "products"), {
-        await addDoc(collection(db, "منتجات"), { 
+    await addDoc(collection(db, "products"), { 
             name: name,
             price: Number(price),
             image: image
